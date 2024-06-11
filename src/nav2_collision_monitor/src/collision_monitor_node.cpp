@@ -376,31 +376,27 @@ void CollisionMonitor::process(const Velocity & cmd_vel_in)
   // Polygon causing robot action (if any)
   std::shared_ptr<Polygon> action_polygon;
 
-  // for (std::shared_ptr<Polygon> polygon : polygons_) {
-  //   if (robot_action.action_type == STOP) {
-  //     // If robot already should stop, do nothing
-  //     break;
-  //   }
+  for (std::shared_ptr<Polygon> polygon : polygons_) {
+    if (robot_action.action_type == STOP) {
+      // If robot already should stop, do nothing
+      break;
+    }
 
-  //   const ActionType at = polygon->getActionType();
-  //   if (at == STOP || at == SLOWDOWN) {
-  //     // Process STOP/SLOWDOWN for the selected polygon
-  //     // if (processStopSlowdown(polygon, collision_points, cmd_vel_in, robot_action)) {
-  //     //   action_polygon = polygon;
-  //     // }
-  //     if (processStop(robot_action)) {
-  //       action_polygon = polygon;
-  //     }
-  //   } else if (at == APPROACH) {
-  //     // Process APPROACH for the selected polygon
-  //     if (processApproach(polygon, collision_points, cmd_vel_in, robot_action)) {
-  //       action_polygon = polygon;
-  //     }
-  //   }
-  // }
-
-  if (processStop(robot_action)) {
-    //action_polygon = polygon;
+    const ActionType at = polygon->getActionType();
+    if (at == STOP || at == SLOWDOWN) {
+      // Process STOP/SLOWDOWN for the selected polygon
+      // if (processStopSlowdown(polygon, collision_points, cmd_vel_in, robot_action)) {
+      //   action_polygon = polygon;
+      // }
+      if (processStop(robot_action)) {
+        action_polygon = polygon;
+      }
+    } else if (at == APPROACH) {
+      // Process APPROACH for the selected polygon
+      if (processApproach(polygon, collision_points, cmd_vel_in, robot_action)) {
+        action_polygon = polygon;
+      }
+    }
   }
 
   if (robot_action.action_type != robot_action_prev_.action_type) {
