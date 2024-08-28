@@ -14,10 +14,11 @@
     <xacro:property name="wheel_offset_x" value="0.315"/>
     <xacro:property name="wheel_offset_y" value="0.24"/>
     <xacro:property name="wheel_offset_z" value="-0.03"/>
-    <xacro:property name="caster_wheel_radius" value="0.035"/>
+    <xacro:property name="caster_wheel_radius" value="0.033"/>
+    <xacro:property name="caster_wheel_thickness" value="0.0225"/>
     <xacro:property name="caster_wheel_mass" value="0.200"/>
-    <xacro:property name="caster_wheel_offset_x" value="0.71"/>
-    <xacro:property name="caster_wheel_offset_z" value="-0.035"/>
+    <xacro:property name="caster_wheel_offset_x" value="0.35"/>
+    <xacro:property name="caster_wheel_offset_z" value="0"/>
 
     <material name="white">
         <color rgba="1 1 1 1" />
@@ -155,16 +156,16 @@
     <!-- CASTER WHEEL LINK -->
 
     <joint name="caster_wheel_joint" type="fixed">
-        <parent link="chassis"/>
+        <parent link="base_link"/>
         <child link="caster_wheel"/>
-        <origin xyz="${caster_wheel_offset_x} 0 ${caster_wheel_offset_z}"/>
+        <origin xyz="${caster_wheel_offset_x} 0 ${caster_wheel_offset_z}" rpy="${pi/2} 0 0"/>
     </joint>
 
 
     <link name="caster_wheel">
         <visual>
             <geometry>
-                <sphere radius="${caster_wheel_radius}"/>
+                <cylinder radius="${caster_wheel_radius}" length="${caster_wheel_thickness}"/>
             </geometry>
             <material name="white"/>
         </visual>
@@ -173,15 +174,13 @@
                 <sphere radius="${caster_wheel_radius}"/>
             </geometry>
         </collision>
-        <xacro:inertial_sphere mass="${caster_wheel_mass}" radius="${caster_wheel_radius}">
+        <xacro:inertial_cylinder mass="${caster_wheel_mass}" length="${caster_wheel_thickness}" radius="${caster_wheel_radius}">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_sphere>
+        </xacro:inertial_cylinder>
     </link>
 
     <gazebo reference="caster_wheel">
         <material>Gazebo/White</material>
-        <mu1 value="0.001"/>
-        <mu2 value="0.001"/>
     </gazebo>
 
 </robot>
